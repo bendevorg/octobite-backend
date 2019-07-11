@@ -59,3 +59,12 @@ typings/
 
 # next.js build output
 .next
+
+#VSCode metadata
+.vscode
+
+# Mac files
+.DS_Store
+
+# Credentials folder
+.credentials/
