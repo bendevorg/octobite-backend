@@ -1,65 +1,84 @@
-'user strict';
-
+const mongoose = require('mongoose');
 const fs = require('fs');
-const path = require('path');
-const basename = path.basename(module.filename);
-const Sequelize = require('sequelize');
-const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USERNAME,
-  process.env.DB_PASSWORD,
+
+const DB_HOST =
+  'mongodb://' +
+  process.env.DB_USERNAME +
+  ':' +
+  encodeURIComponent(process.env.DB_PASSWORD) +
+  '@' +
+  process.env.DB_HOST +
+  ':' +
+  process.env.DB_PORT +
+  '/' +
+  process.env.DB_NAME;
+
+// Connect to the database
+mongoose.connect(
+  DB_HOST,
   {
-    host: process.env.DB_HOST,
-    dialect: 'postgres',
-    pool: {
-      max: 5,
-      min: 0,
-      idle: 10000
-    },
-    logging: false,
+    auto_reconnect: true,
+    useNewUrlParser: true,
+    useCreateIndex: true
   }
 );
 
-sequelize
-  .authenticate()
-  .then(() => {
-    /*eslint-disable */
-    console.log('Database connected.');
-    /* eslint-enable */
-  })
-  .catch(err => {
-    console.log(err);
-    // logger.critical(err);
-  });
+const database = mongoose.connection;
 
-let database = {};
-database.sequelize = sequelize;
-database.Sequelize = Sequelize;
-
-fs.readdirSync(__dirname)
-  .filter(
-    file =>
-      file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js'
-  )
-  .forEach(file => {
-    const model = sequelize.import(path.join(__dirname, file));
-    database[model.name] = model;
-  });
-
-Object.keys(database).forEach(modelName => {
-  if ('associate' in database[modelName])
-    database[modelName].associate(database);
+// Connection fails log the error
+database.on('error', err => {
+  console.error('MongoDB connection error: ', err);
 });
 
-database.sequelize
-  .sync()
-  .then(() => {
-    /*eslint-disable */
-    console.log('Tables created');
-    /* eslint-enable */
-  })
-  .catch(err => {
-    // logger.critical(err);
-  });
+// Connection ok log the success
+database.once('open', () => {
+  console.info('MongoDB connection is established.');
+});
+
+// Connect lost log the event and try to reconnect
+database.on('disconnected', () => {
+  console.error('MongoDB disconnected.');
+  mongoose.connect(
+    DB_HOST,
+    { server: { auto_reconnect: true } }
+  );
+});
+
+// Connect restablished log the event
+database.on('reconnected', () => {
+  console.info('MongoDB reconnected.');
+});
+
+// Load our DB models
+let modelsPath = process.cwd() + '/server/models';
+let remainingModels = [];
+
+//  Fill schemas
+fs.readdirSync(modelsPath).forEach(file => {
+  if (file.indexOf('.js') && file !== 'database.js') {
+    try {
+      let schemaName = file.split('.')[0];
+      mongoose.Schema[schemaName] = require(modelsPath + '/' + file)(mongoose);
+      mongoose.model(schemaName, mongoose.Schema[schemaName]);
+      database[schemaName] = mongoose.model(schemaName);
+    } catch (e) {
+      remainingModels.push(file);
+    }
+  }
+});
+
+let remainingModelIndex = 0;
+
+while (remainingModels.length > 0) {
+  try {
+    let schemaName = remainingModels[remainingModelIndex].split('.')[0];
+    mongoose.Schema[schemaName] = require(modelsPath + '/' + remainingModels[remainingModelIndex])(mongoose);
+    mongoose.model(schemaName, mongoose.Schema[schemaName]);
+    database[schemaName] = mongoose.model(schemaName);
+    remainingModels.splice(remainingModelIndex, 1);
+  } catch (e) {
+    remainingModelIndex = remainingModelIndex === remainingModels.length - 1 ? 0 : remainingModelIndex + 1;
+  }
+}
 
 module.exports = database;
