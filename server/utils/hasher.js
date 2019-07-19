@@ -15,11 +15,15 @@ const crypto = require('crypto-js');
  */
 module.exports = (data, key) => {
   try {
-    if (!data || !key) return false;
+    if (!data || !key) {
+      return false;
+    }
     let hashedData;
-    if (data instanceof Object)
+    if (data instanceof Object) {
       hashedData = crypto.HmacSHA256(JSON.stringify(data), key).toString();
-    else hashedData = crypto.HmacSHA256(data.toString(), key).toString();
+    } else {
+      hashedData = crypto.HmacSHA256(data.toString(), key).toString();
+    }
     return hashedData;
   } catch (err) {
     return false;

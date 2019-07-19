@@ -1,16 +1,14 @@
-'use strict';
-
 /* eslint-disable no-console */
 
-const fs = require('fs'),
-  path = require('path'),
-  readline = require('readline');
+const fs = require('fs');
+const path = require('path');
+const readline = require('readline');
 
-const filename = '.env',
-  file = path.resolve(__dirname, '../' + filename);
+const filename = '.env';
+const envFile = path.resolve(__dirname, `../${filename}`);
 
-const credentialsPath = path.resolve(process.cwd() + '/.credentials');
-let configVars = [];
+const credentialsPath = path.resolve(`${process.cwd()}/.credentials`);
+const configVars = [];
 
 /**
  * Get all our configs inside de configs folder
@@ -21,23 +19,66 @@ let configVars = [];
  * If you want a new environment variable on build add here
  */
 
-if (fs.existsSync(process.cwd() + '/tools/environment.json'))
-  configVars.push(require(process.cwd() + '/tools/environment.json')[process.argv[2]]);
+if (fs.existsSync(`${process.cwd()}/tools/environment.json`)) {
+  configVars.push(
+    // eslint-disable-next-line global-require, import/no-dynamic-require
+    require(`${process.cwd()}/tools/environment.json`)[process.argv[2]]
+  );
+}
 
-// Get our routers
+// Get our credentials
 if (fs.existsSync(credentialsPath)) {
   fs.readdirSync(credentialsPath).forEach(file => {
-    if (file.indexOf('.json') !== -1)
-      configVars.push(require(credentialsPath + '/' + file)[process.argv[2]]);
+    if (file.indexOf('.json') !== -1) {
+      // eslint-disable-next-line global-require, import/no-dynamic-require
+      configVars.push(require(`${credentialsPath}/${file}`)[process.argv[2]]);
+    }
   });
 }
 
-console.log('checking file ' + filename);
 /**
- * Check the stat of the file .env
- * Calling the callback onStat
+ * Write the .env file
  */
-fs.stat(file, onStat);
+function completeFile() {
+  const writeStream = fs.createWriteStream(envFile);
+
+  configVars.forEach(config => {
+    Object.keys(config).forEach(key => {
+      const envVar = config[key];
+      const newLine = `${key}=${envVar}`;
+      console.log(`writing to file: ${newLine}`);
+      writeStream.write(`${newLine}\n`);
+    });
+  });
+
+  writeStream.end('');
+  console.log(`${filename} is ok!`);
+}
+
+/**
+ * Read the .env file
+ */
+function readFile() {
+  const lineReader = readline.createInterface({
+    input: fs.createReadStream(envFile),
+  });
+
+  lineReader.on('close', completeFile);
+}
+
+/**
+ * Create a new file using the name filename
+ * Used if the .env already doest not exists
+ */
+function createFile() {
+  fs.writeFile(envFile, '', function error(err) {
+    if (err) {
+      console.error(err);
+    }
+
+    readFile();
+  });
+}
 
 /**
  * Check if the .env already exists. If it does read it
@@ -50,55 +91,14 @@ function onStat(err, stats) {
   if (!err && stats.isFile()) {
     readFile();
   } else {
-    console.log(filename + ' does not exist, creating it.');
+    console.log(`${filename} does not exist, creating it.`);
     createFile();
   }
 }
 
 /**
- * Create a new file using the name filename
- * Used if the .env already doest not exists
+ * Check the stat of the file .env
+ * Calling the callback onStat
  */
-function createFile() {
-  fs.writeFile(file, '', function(err) {
-    if (err) return console.error(err);
-
-    readFile();
-  });
-}
-
-/**
- * Read the .env file
- */
-function readFile() {
-  const lineReader = readline.createInterface({
-    input: fs.createReadStream(file)
-  });
-
-  lineReader.on('line', parseLine);
-  lineReader.on('close', completeFile);
-}
-
-function parseLine(line) {
-  let arr = line.split('=');
-  let key = arr[0];
-}
-
-/**
- * Write the .env file
- */
-function completeFile() {
-  let writeStream = fs.createWriteStream(file);
-
-  configVars.forEach(config => {
-    for (let key in config) {
-      let envVar = config[key];
-      let newLine = key + '=' + envVar;
-      console.log('writing to file: ' + newLine);
-      writeStream.write(newLine + '\n');
-    }
-  });
-
-  writeStream.end('');
-  console.log(filename + ' is ok!');
-}
+console.log(`checking file ${filename}`);
+fs.stat(envFile, onStat);

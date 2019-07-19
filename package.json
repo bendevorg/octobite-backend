@@ -14,7 +14,8 @@
     "test": "npm run env_setup_production && nyc --reporter=html --reporter=text mocha test/runTests.js --timeout 10000",
     "test_dev": "npm run env_setup_development && nyc --reporter=html --reporter=text mocha test/runTests.js --timeout 10000",
     "coverage": "nyc report --reporter=text-lcov | codacy-coverage && rm -rf ./coverage",
-    "apidoc": "apidoc -i server/controllers/ -o docs/"
+    "apidoc": "apidoc -i server/controllers/ -o docs/",
+    "lint": "eslint --ignore-path .gitignore ."
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,7 @@
   "homepage": "https://github.com/bendevorg/octobite-backend#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "crypto-js": "3.1.9-1",
     "dotenv": "^8.0.0",
     "express": "^4.17.1",
     "joi": "14.3.1",
@@ -37,8 +39,9 @@
     "apidoc": "0.17.7",
     "chai": "^4.2.0",
     "codacy-coverage": "^3.4.0",
-    "eslint": "^6.0.1",
+    "eslint": "^5.3.0",
     "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-config-prettier": "6.0.0",
     "eslint-plugin-import": "^2.18.0",
     "eslint-plugin-node": "^9.1.0",
     "eslint-plugin-promise": "^4.2.1",
