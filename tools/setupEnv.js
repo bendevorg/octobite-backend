@@ -26,7 +26,7 @@ if (fs.existsSync(`${process.cwd()}/tools/environment.json`)) {
   );
 }
 
-// Get our routers
+// Get our credentials
 if (fs.existsSync(credentialsPath)) {
   fs.readdirSync(credentialsPath).forEach(file => {
     if (file.indexOf('.json') !== -1) {
@@ -36,11 +36,6 @@ if (fs.existsSync(credentialsPath)) {
   });
 }
 
-function parseLine(line) {
-  const arr = line.split('=');
-  const key = arr[0];
-}
-
 /**
  * Write the .env file
  */
@@ -48,12 +43,12 @@ function completeFile() {
   const writeStream = fs.createWriteStream(envFile);
 
   configVars.forEach(config => {
-    for (const key in config) {
+    Object.keys(config).forEach(key => {
       const envVar = config[key];
       const newLine = `${key}=${envVar}`;
       console.log(`writing to file: ${newLine}`);
       writeStream.write(`${newLine}\n`);
-    }
+    });
   });
 
   writeStream.end('');
@@ -68,7 +63,6 @@ function readFile() {
     input: fs.createReadStream(envFile),
   });
 
-  lineReader.on('line', parseLine);
   lineReader.on('close', completeFile);
 }
 
