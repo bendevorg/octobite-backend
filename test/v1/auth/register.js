@@ -14,7 +14,7 @@ const app =
 const api = supertest(app);
 const path = `/v1/auth/register`;
 
-module.exports = describe(`Sign in`, () => {
+module.exports = describe(`Register V1`, () => {
   const createdUser = {
     name: faker.random.word(30),
     email: faker.internet.email(),

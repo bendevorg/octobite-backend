@@ -14,7 +14,7 @@ const app =
 const api = supertest(app);
 const path = `/v1/auth/sign_in`;
 
-module.exports = describe(`Sign in`, () => {
+module.exports = describe(`Sign in V1`, () => {
   const createdUser = {
     name: faker.random.word(30),
     email: faker.internet.email(),
@@ -56,23 +56,6 @@ module.exports = describe(`Sign in`, () => {
     api
       .post(path)
       .send({
-        password: faker.random.word(6),
-      })
-      .end((err, res) => {
-        if (err) {
-          done(err);
-        } else {
-          expect(res.status, `Status`).to.equal(400);
-          done();
-        }
-      });
-  });
-
-  it(`Should return 400 when email sent is below 3 characters`, done => {
-    api
-      .post(path)
-      .send({
-        email: faker.random.word(2),
         password: faker.random.word(6),
       })
       .end((err, res) => {
