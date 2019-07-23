@@ -52,7 +52,7 @@ module.exports = describe(`Sign in`, () => {
       });
   });
 
-  it(`Should return 400 when no username is sent`, done => {
+  it(`Should return 400 when no email is sent`, done => {
     api
       .post(path)
       .send({
@@ -68,11 +68,11 @@ module.exports = describe(`Sign in`, () => {
       });
   });
 
-  it(`Should return 400 when username sent is below 3 characters`, done => {
+  it(`Should return 400 when email sent is below 3 characters`, done => {
     api
       .post(path)
       .send({
-        username: faker.random.word(2),
+        email: faker.random.word(2),
         password: faker.random.word(6),
       })
       .end((err, res) => {
@@ -85,11 +85,11 @@ module.exports = describe(`Sign in`, () => {
       });
   });
 
-  it(`Should return 400 when username is not a valid email`, done => {
+  it(`Should return 400 when email is not a valid email`, done => {
     api
       .post(path)
       .send({
-        username: faker.random.word(10),
+        email: faker.random.word(10),
         password: faker.random.word(6),
       })
       .end((err, res) => {
@@ -106,7 +106,7 @@ module.exports = describe(`Sign in`, () => {
     api
       .post(path)
       .send({
-        username: faker.internet.email(),
+        email: faker.internet.email(),
       })
       .end((err, res) => {
         if (err) {
@@ -122,7 +122,7 @@ module.exports = describe(`Sign in`, () => {
     api
       .post(path)
       .send({
-        username: faker.internet.email(),
+        email: faker.internet.email(),
         password: faker.random.word(2),
       })
       .end((err, res) => {
@@ -135,11 +135,11 @@ module.exports = describe(`Sign in`, () => {
       });
   });
 
-  it(`Should return 404 when username does not exist`, done => {
+  it(`Should return 404 when email does not exist`, done => {
     api
       .post(path)
       .send({
-        username: faker.internet.email(),
+        email: faker.internet.email(),
         password: faker.random.word(6),
       })
       .end((err, res) => {
@@ -156,7 +156,7 @@ module.exports = describe(`Sign in`, () => {
     api
       .post(path)
       .send({
-        username: createdUser.username,
+        email: createdUser.email,
         password: faker.random.word(6),
       })
       .end((err, res) => {
