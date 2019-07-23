@@ -1,10 +1,8 @@
 /* eslint-disable no-console */
-const dotenv = require('dotenv');
+require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
 const router = require('../server/core/router.js');
-
-dotenv.config();
 
 const app = express();
 
