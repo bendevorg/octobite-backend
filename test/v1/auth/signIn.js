@@ -62,7 +62,7 @@ module.exports = describe(`Sign in`, () => {
         if (err) {
           done(err);
         } else {
-          expect(res.status, 'Status').to.equal(400);
+          expect(res.status, `Status`).to.equal(400);
           done();
         }
       });
@@ -79,7 +79,7 @@ module.exports = describe(`Sign in`, () => {
         if (err) {
           done(err);
         } else {
-          expect(res.status, 'Status').to.equal(400);
+          expect(res.status, `Status`).to.equal(400);
           done();
         }
       });
@@ -96,7 +96,7 @@ module.exports = describe(`Sign in`, () => {
         if (err) {
           done(err);
         } else {
-          expect(res.status, 'Status').to.equal(400);
+          expect(res.status, `Status`).to.equal(400);
           done();
         }
       });
