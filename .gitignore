@@ -68,3 +68,6 @@ typings/
 
 # Credentials folder
 .credentials/
+
+# Coverage file
+coverage.lcov

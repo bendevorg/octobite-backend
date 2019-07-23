@@ -13,7 +13,7 @@
     "server_development": "nodemon tools/startServer.js",
     "test": "npm run env_setup_production && nyc --reporter=html --reporter=text mocha test/runTests.js --timeout 10000",
     "test_dev": "npm run env_setup_development && nyc --reporter=html --reporter=text mocha test/runTests.js --timeout 10000",
-    "coverage": "nyc report --reporter=text-lcov | codacy-coverage && rm -rf ./coverage",
+    "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "apidoc": "apidoc -i server/controllers/ -o docs/",
     "lint": "eslint --ignore-path .gitignore ."
   },
@@ -38,7 +38,7 @@
   "devDependencies": {
     "apidoc": "0.17.7",
     "chai": "^4.2.0",
-    "codacy-coverage": "^3.4.0",
+    "codecov": "3.5.0",
     "eslint": "^5.3.0",
     "eslint-config-airbnb-base": "^13.2.0",
     "eslint-config-prettier": "6.0.0",
