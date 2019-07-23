@@ -9,5 +9,6 @@ const controllers = retrieveControllers(
 const schemas = retrieveSchemas(__filename.split('/routers')[1].split('.')[0]);
 
 router.post('/sign_in', schemas.signIn, controllers.signIn);
+router.post('/register', schemas.register, controllers.register);
 
 module.exports = router;
