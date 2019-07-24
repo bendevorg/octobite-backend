@@ -1,17 +1,15 @@
-const database = require('../../models/database');
-const constants = require('../../utils/constants');
+const database = require('../models/database');
+const constants = require('./constants');
 
-module.exports = (table, filter) => {
-  database[table]
-    .find(filter)
-    .then(result => {
-      return res.status(200).json({
-        data: result,
+module.exports = (table, filter = {}) => {
+  return new Promise((resolve, reject) => {
+    database[table]
+      .find(filter)
+      .then(result => {
+        return resolve(result);
+      })
+      .catch(err => {
+        return reject(constants.messages.error.UNEXPECTED_DB);
       });
-    })
-    .catch(err => {
-      return res.status(500).json({
-        data: constants.messages.error.UNEXPECTED_DB,
-      });
-    });
+  });
 };
