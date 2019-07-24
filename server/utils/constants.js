@@ -10,4 +10,8 @@ module.exports = {
         'An error ocurred while accessing our database. Please try again.',
     },
   },
+  tables: {
+    GAMES: 'Games',
+    USERS: 'Users',
+  },
 };
