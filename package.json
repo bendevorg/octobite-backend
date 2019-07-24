@@ -15,7 +15,7 @@
     "test_dev": "npm run env_setup_development && nyc --reporter=html --reporter=text mocha test/runTests.js --timeout 10000",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "apidoc": "apidoc -i server/controllers/ -o docs/",
-    "lint": "eslint --ignore-path .gitignore ."
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
