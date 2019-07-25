@@ -1,9 +1,9 @@
 const joi = require('joi');
 
 const schema = joi.object().keys({
-  username: joi
+  email: joi
     .string()
-    .min(3)
+    .email()
     .required(),
   password: joi
     .string()
