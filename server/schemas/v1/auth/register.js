@@ -7,7 +7,7 @@ const schema = joi.object().keys({
     .required(),
   name: joi
     .string()
-    .min(4)
+    .min(3)
     .required(),
   password: joi
     .string()

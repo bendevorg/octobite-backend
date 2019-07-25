@@ -161,9 +161,10 @@ module.exports = describe(`Sign in V1`, () => {
         if (err) {
           done(err);
         } else {
-          expect(res.status, `Status`).to.equal(200);
-          expect(res.body, `Body`).to.contain('id');
-          expect(res.body, `Body`).to.not.contain('password');
+          expect(res.status, `Status`).to.equal(201);
+          expect(res.body, `Body`).to.have.property('data');
+          expect(res.body.data, `Data`).to.have.property('_id');
+          expect(res.body.data, `Data`).to.not.have.property('password');
           done();
         }
       });

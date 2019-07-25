@@ -88,7 +88,7 @@ module.exports = describe(`Register V1`, () => {
     api
       .post(path)
       .send({
-        name: faker.random.word(2),
+        name: 'aa',
         email: faker.internet.email(),
         password: faker.random.word(6),
       })
@@ -186,8 +186,7 @@ module.exports = describe(`Register V1`, () => {
       });
   });
 
-  it(`Should return 201 with user's info when username and password matches
-    but user's info must not contain its password`, done => {
+  it(`Should return 201 with user's info but must not contain its password`, done => {
     api
       .post(path)
       .send(userToBeCreated)
@@ -196,8 +195,9 @@ module.exports = describe(`Register V1`, () => {
           done(err);
         } else {
           expect(res.status, `Status`).to.equal(201);
-          expect(res.body, `Body`).to.contain('id');
-          expect(res.body, `Body`).to.not.contain('password');
+          expect(res.body, `Body`).to.have.property('data');
+          expect(res.body.data, `Data`).to.have.property('_id');
+          expect(res.body.data, `Data`).to.not.have.property('password');
           done();
         }
       });

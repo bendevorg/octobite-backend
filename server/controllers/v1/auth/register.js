@@ -16,20 +16,26 @@
   *
  */
 
-const database = require('../../../models/database');
 const hasher = require('../../../utils/hasher');
 const constants = require('../../../utils/constants');
+const insertDatabase = require('../../../utils/insertDatabase');
 
 module.exports = (req, res) => {
   let { email, name, password } = req.body;
   email = email.trim();
   name = name.trim();
   password = hasher(password, constants.values.cryptography.PASSWORD_KEY);
-
-  const newUser = new database.Users({ email, name, password });
-  newUser.save((err, user) => {
-    return res.status(200).json({
-      data: user,
+  const newUser = { email, name, password };
+  insertDatabase(constants.tables.USERS, newUser)
+    .then(newRegister => {
+      delete newRegister.password;
+      return res.status(201).json({
+        data: newRegister,
+      });
+    })
+    .catch(err => {
+      return res.status(err.status).json({
+        data: err.message,
+      });
     });
-  });
 };

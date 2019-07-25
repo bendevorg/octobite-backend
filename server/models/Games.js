@@ -9,7 +9,7 @@ module.exports = mongoose => {
       unique: true,
       required: true,
     },
-    valor: {
+    value: {
       type: Number,
       required: false,
       default: 0,
