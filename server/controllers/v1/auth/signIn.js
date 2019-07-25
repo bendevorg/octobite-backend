@@ -1,25 +1,64 @@
 /**
- * @api {POST} /example/hey POST example
- * @apiName Hey exaple
- * @apiGroup Example
- * @apiVersion 0.0.1
+ * @api {POST} /v1/signIn POST example
+ * @apiName Sign in
+ * @apiGroup Auth
+ * @apiVersion 1.0.0
  *
- * @apiParam {String} Example Example's body string
+ * @apiParam {String} email User's email
+ * @apiParam {String} password User's password
  * @apiParamExample {json} Request-example:
- * {
- *     "example": "Test"
- * }
- * @apiSuccess (200) {String} data Hey.
+    {
+      "email": "milkao@milk.com.br",
+      "password": "jaca123"
+    }
+ * @apiSuccess (200) {String} data User data.
  * @apiSuccessExample {json} Success-Response:
-    { "data": "Hey!" }
- * @apiError (400) {String} msg Error message.
+    {
+      "data": {
+        "_id": "1",
+        "email": "milkao@bendev.com",
+        "name": "Milk",
+        "__v": 0
+      }
+    }
+ * @apiError (404) {String} msg Error message.
  * @apiErrorExample {json} Error-Response:
-    { "data": "example is missing or is not correctly formatted." }
+    {
+      "data": "The email and password you entered do not correspond to an existing user."
+    }
   *
+  TODO: Finish documentation
  */
 
+const database = require('../../../models/database');
+const hasher = require('../../../utils/hasher');
+const constants = require('../../../utils/constants');
+
 module.exports = (req, res) => {
-  return res.status(200).json({
-    msg: 'Sign in',
-  });
+  let { email, password } = req.body;
+  email = email.trim();
+  password = hasher(password, constants.values.cryptography.PASSWORD_KEY);
+
+  database.Users.findOne({
+    email,
+    password,
+  })
+    .then(user => {
+      if (user) {
+        const userDataToReturn = user.toObject();
+        delete userDataToReturn.password;
+
+        return res.status(200).json({
+          data: userDataToReturn,
+        });
+      }
+      return res.status(404).json({
+        data: constants.messages.error.INVALID_USER,
+      });
+    })
+    .catch(e => {
+      return res.status(500).json({
+        data: constants.messages.error.UNEXPECTED_DB,
+      });
+    });
 };

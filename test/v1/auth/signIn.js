@@ -18,7 +18,7 @@ module.exports = describe(`Sign in V1`, () => {
   const createdUser = {
     name: faker.random.word(30),
     email: faker.internet.email(),
-    password: faker.random.word(30),
+    password: faker.random.alphaNumeric(30),
   };
 
   before(done => {
@@ -56,7 +56,7 @@ module.exports = describe(`Sign in V1`, () => {
     api
       .post(path)
       .send({
-        password: faker.random.word(6),
+        password: faker.random.alphaNumeric(6),
       })
       .end((err, res) => {
         if (err) {
@@ -72,8 +72,8 @@ module.exports = describe(`Sign in V1`, () => {
     api
       .post(path)
       .send({
-        email: faker.random.word(10),
-        password: faker.random.word(6),
+        email: faker.random.alphaNumeric(10),
+        password: faker.random.alphaNumeric(6),
       })
       .end((err, res) => {
         if (err) {
@@ -106,7 +106,7 @@ module.exports = describe(`Sign in V1`, () => {
       .post(path)
       .send({
         email: faker.internet.email(),
-        password: faker.random.word(2),
+        password: faker.random.alphaNumeric(2),
       })
       .end((err, res) => {
         if (err) {
@@ -123,7 +123,7 @@ module.exports = describe(`Sign in V1`, () => {
       .post(path)
       .send({
         email: faker.internet.email(),
-        password: faker.random.word(6),
+        password: faker.random.alphaNumeric(6),
       })
       .end((err, res) => {
         if (err) {
@@ -140,7 +140,7 @@ module.exports = describe(`Sign in V1`, () => {
       .post(path)
       .send({
         email: createdUser.email,
-        password: faker.random.word(6),
+        password: faker.random.alphaNumeric(6),
       })
       .end((err, res) => {
         if (err) {
@@ -156,12 +156,15 @@ module.exports = describe(`Sign in V1`, () => {
     but user's info must not contain its password`, done => {
     api
       .post(path)
-      .send(createdUser)
+      .send({
+        email: createdUser.email,
+        password: createdUser.password,
+      })
       .end((err, res) => {
         if (err) {
           done(err);
         } else {
-          expect(res.status, `Status`).to.equal(201);
+          expect(res.status, `Status`).to.equal(200);
           expect(res.body, `Body`).to.have.property('data');
           expect(res.body.data, `Data`).to.have.property('_id');
           expect(res.body.data, `Data`).to.not.have.property('password');
