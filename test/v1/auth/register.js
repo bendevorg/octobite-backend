@@ -45,25 +45,38 @@ module.exports = describe(`Register V1`, () => {
   });
 
   after(done => {
+    let deletedAmount = 0;
     database.Users.deleteOne({ email: createdUser.email })
       .then(ok => {
-        if (!ok) {
-          return done(error);
+        if (deletedAmount > 0) {
+          if (!ok) {
+            return done(error);
+          }
+          return done();
         }
-        return done();
+        deletedAmount++;
       })
       .catch(err => {
-        return done(err);
+        if (deletedAmount > 0) {
+          return done(err);
+        }
+        deletedAmount++;
       });
     database.Users.deleteOne({ email: userToBeCreated.email })
       .then(ok => {
-        if (!ok) {
-          return done(error);
+        if (deletedAmount > 0) {
+          if (!ok) {
+            return done(error);
+          }
+          return done();
         }
-        return done();
+        deletedAmount++;
       })
       .catch(err => {
-        return done(err);
+        if (deletedAmount > 0) {
+          return done(err);
+        }
+        deletedAmount++;
       });
   });
 

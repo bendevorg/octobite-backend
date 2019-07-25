@@ -27,7 +27,6 @@ module.exports = (err, req, res, next) => {
       data: constants.messages.error.UNIQUE_CONSTRAINT,
     });
   }
-  console.log(err);
   return res.status(500).json({
     data: constants.messages.error.UNEXPECTED_RUNNING,
   });
