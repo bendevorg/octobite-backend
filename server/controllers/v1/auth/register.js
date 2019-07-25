@@ -20,13 +20,13 @@ const hasher = require('../../../utils/hasher');
 const constants = require('../../../utils/constants');
 const insertDatabase = require('../../../utils/insertDatabase');
 
-module.exports = (req, res) => {
+module.exports = (req, res, next) => {
   let { email, name, password } = req.body;
   email = email.trim();
   name = name.trim();
   password = hasher(password, constants.values.cryptography.PASSWORD_KEY);
   const newUser = { email, name, password };
-  insertDatabase(constants.tables.USERS, newUser)
+  return insertDatabase(constants.tables.USERS, newUser)
     .then(newRegister => {
       delete newRegister.password;
       return res.status(201).json({
@@ -34,8 +34,6 @@ module.exports = (req, res) => {
       });
     })
     .catch(err => {
-      return res.status(err.status).json({
-        data: err.message,
-      });
+      return next(err);
     });
 };

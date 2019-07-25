@@ -6,6 +6,8 @@ module.exports = {
   },
   messages: {
     error: {
+      UNEXPECTED_RUNNING:
+        'An unexpected error ocurred while processing your request. Please try again.',
       UNEXPECTED_DB:
         'An error ocurred while accessing our database. Please try again.',
       UNIQUE_CONSTRAINT: 'Data sent is violating a unique constraint',
@@ -16,6 +18,9 @@ module.exports = {
     USERS: 'Users',
   },
   error: {
+    name: {
+      VALIDATION_ERROR: 'ValidationError',
+    },
     code: {
       UNIQUE_CONSTRAINT: 11000,
     },
