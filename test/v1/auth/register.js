@@ -101,9 +101,9 @@ module.exports = describe(`Register V1`, () => {
     api
       .post(path)
       .send({
-        name: 'aa',
+        name: faker.random.alphaNumeric(2),
         email: faker.internet.email(),
-        password: faker.random.word(6),
+        password: faker.random.alphaNumeric(6),
       })
       .end((err, res) => {
         if (err) {
@@ -119,8 +119,8 @@ module.exports = describe(`Register V1`, () => {
     api
       .post(path)
       .send({
-        name: faker.random.word(6),
-        password: faker.random.word(6),
+        name: faker.random.alphaNumeric(6),
+        password: faker.random.alphaNumeric(6),
       })
       .end((err, res) => {
         if (err) {
@@ -136,9 +136,9 @@ module.exports = describe(`Register V1`, () => {
     api
       .post(path)
       .send({
-        name: faker.random.word(6),
-        email: faker.random.word(6),
-        password: faker.random.word(6),
+        name: faker.random.alphaNumeric(6),
+        email: faker.random.alphaNumeric(6),
+        password: faker.random.alphaNumeric(6),
       })
       .end((err, res) => {
         if (err) {
@@ -154,7 +154,7 @@ module.exports = describe(`Register V1`, () => {
     api
       .post(path)
       .send({
-        name: faker.random.word(6),
+        name: faker.random.alphaNumeric(6),
         username: faker.internet.email(),
       })
       .end((err, res) => {
@@ -171,9 +171,9 @@ module.exports = describe(`Register V1`, () => {
     api
       .post(path)
       .send({
-        name: faker.random.word(6),
+        name: faker.random.alphaNumeric(6),
         username: faker.internet.email(),
-        password: faker.random.word(2),
+        password: faker.random.alphaNumeric(2),
       })
       .end((err, res) => {
         if (err) {
