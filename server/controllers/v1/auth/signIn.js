@@ -1,5 +1,5 @@
 /**
- * @api {POST} /v1/signIn POST example
+ * @api {POST} /v1/sign_in POST example
  * @apiName Sign in
  * @apiGroup Auth
  * @apiVersion 1.0.0
@@ -30,35 +30,28 @@
   TODO: Finish documentation
  */
 
-const database = require('../../../models/database');
+const findDatabase = require('../../../utils/findDatabase');
 const hasher = require('../../../utils/hasher');
 const constants = require('../../../utils/constants');
 
-module.exports = (req, res) => {
+module.exports = (req, res, next) => {
   let { email, password } = req.body;
   email = email.trim();
   password = hasher(password, constants.values.cryptography.PASSWORD_KEY);
 
-  database.Users.findOne({
-    email,
-    password,
-  })
+  findDatabase(constants.tables.USERS, { email, password }, 1)
     .then(user => {
       if (user) {
-        const userDataToReturn = user.toObject();
-        delete userDataToReturn.password;
-
+        delete user.password;
         return res.status(200).json({
-          data: userDataToReturn,
+          data: user,
         });
       }
       return res.status(404).json({
         data: constants.messages.error.INVALID_USER,
       });
     })
-    .catch(e => {
-      return res.status(500).json({
-        data: constants.messages.error.UNEXPECTED_DB,
-      });
+    .catch(err => {
+      return next(err);
     });
 };
