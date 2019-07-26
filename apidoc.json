@@ -1,0 +1,10 @@
+{
+  "name": "Octobite",
+  "version": "1.0.0",
+  "title": "Octobite",
+  "sampleUrl": "http://dev.octobite.com",
+  "header": {
+    "title": "Introduction",
+    "filename": "HEADER.md"
+  }
+}
