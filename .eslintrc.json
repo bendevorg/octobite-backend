@@ -21,10 +21,11 @@
     "window": false
   },
   "rules": {
-    "no-param-reassign": ["error", { "props": false }],
+    "curly": ["error", "all"],
     "import/no-extraneous-dependencies": "off",
+    "no-param-reassign": ["error", { "props": false }],
+    "no-underscore-dangle": "off",
     "node/no-unpublished-require": "off",
-    "promise/no-callback-in-promise": "off",
-    "curly": ["error", "all"]
+    "promise/no-callback-in-promise": "off"
   }
 }
