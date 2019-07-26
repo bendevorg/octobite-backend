@@ -21,6 +21,7 @@
     "window": false
   },
   "rules": {
+    "no-param-reassign": ["error", { "props": false }],
     "import/no-extraneous-dependencies": "off",
     "node/no-unpublished-require": "off",
     "promise/no-callback-in-promise": "off",

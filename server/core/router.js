@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const retrieveRouters = require('../utils/retrieveRouters');
 
 const routersPath = `${process.cwd()}/server/core/routers`;
-const errorMiddleware = require('../controllers/errorMiddleware');
+const errorMiddleware = require('../middlewares/errorMiddleware');
 
 let router = express.Router();
 router.use(bodyParser.json());
