@@ -19,6 +19,7 @@
 const hasher = require('../../../utils/hasher');
 const constants = require('../../../utils/constants');
 const insertDatabase = require('../../../utils/insertDatabase');
+const generateSession = require('../../../utils/generateSession');
 
 module.exports = (req, res, next) => {
   let { email, name, password } = req.body;
@@ -28,6 +29,19 @@ module.exports = (req, res, next) => {
   const newUser = { email, name, password };
   return insertDatabase(constants.tables.USERS, newUser)
     .then(newRegister => {
+      const jwt = generateSession(
+        newRegister._id,
+        constants.values.cryptography.TOKEN_KEY,
+        constants.values.cryptography.SESSION_SIGNATURE_KEY,
+        constants.values.EXPIRATION_TIME_IN_SECONDS
+      );
+
+      res.cookie(constants.values.cookies.SESSION, jwt, {
+        expires: new Date(
+          Date.now() + constants.values.EXPIRATION_TIME_IN_SECONDS * 1000
+        ),
+      });
+
       delete newRegister.password;
       return res.status(201).json({
         data: newRegister,
