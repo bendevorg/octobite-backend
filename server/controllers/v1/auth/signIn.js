@@ -1,11 +1,11 @@
 /**
- * @api {POST} /v1/sign_in POST example
+ * @api {POST} /v1/sign_in Sign in
  * @apiName Sign in
  * @apiGroup Auth
  * @apiVersion 1.0.0
  *
- * @apiParam {String} email User's email
- * @apiParam {String} password User's password
+ * @apiParam {String} email User email.
+ * @apiParam {String} password User password.
  * @apiParamExample {json} Request-example:
     {
       "email": "milkao@milk.com.br",
@@ -21,14 +21,18 @@
         "__v": 0
       }
     }
- * @apiError (404) {String} msg Error message.
- * @apiErrorExample {json} Error-Response:
+ * @apiError (400) {String} data Error message.
+ * @apiError (404) {String} data Error message.
+ *
+ * @apiErrorExample {json} 400:
+    {
+      "data": "\"password\" is not allowed to be empty"
+    }
+ * @apiErrorExample {json} 404:
     {
       "data": "The email and password you entered do not correspond to an existing user."
     }
-  *
-  TODO: Finish documentation
- */
+*/
 
 const findDatabase = require('../../../utils/findDatabase');
 const hasher = require('../../../utils/hasher');
