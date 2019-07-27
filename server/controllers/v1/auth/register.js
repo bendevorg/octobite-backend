@@ -1,20 +1,40 @@
 /**
- * @api {POST} /example/hey POST example
- * @apiName Hey exaple
- * @apiGroup Example
- * @apiVersion 0.0.1
+ * @api {POST} /v1/register Register
+ * @apiName Register
+ * @apiGroup Auth
+ * @apiVersion 1.0.0
  *
- * @apiParam {String} Example Example's body string
+ * @apiParam {String} email User email.
+ * @apiParam {String} name User name.
+ * @apiParam {String} password User password.
  * @apiParamExample {json} Request-example:
- * {
- *     "example": "Test"
- * }
- * @apiSuccess (200) {String} data Hey.
- * @apiError (400) {String} msg Error message.
- * @apiErrorExample {json} Error-Response:
-    { "data": "example is missing or is not correctly formatted." }
-  *
- */
+    {
+      "email": "milkao@milk.com.br",
+      "name": "Milk"
+      "password": "jaca123"
+    }
+ * @apiSuccess (201) {String} data User data.
+ * @apiSuccessExample {json} Success-Response:
+    {
+      "data": {
+        "_id": "1",
+        "email": "milkao@bendev.com",
+        "name": "Milk",
+        "__v": 0
+      }
+    }
+ * @apiError (400) {String} data Error message.
+ * @apiError (404) {String} data Error message.
+ *
+ * @apiErrorExample {json} 400:
+    {
+      "data": "\"password\" is not allowed to be empty"
+    }
+ * @apiErrorExample {json} 409:
+    {
+      "data": "Data sent is violating a unique constraint."
+    }
+*/
 
 const hasher = require('../../../utils/hasher');
 const constants = require('../../../utils/constants');
