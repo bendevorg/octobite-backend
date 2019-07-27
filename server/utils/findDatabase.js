@@ -5,6 +5,7 @@ module.exports = (table, filter = {}, limit = 10) => {
     if (limit === 1) {
       return database[table]
         .findOne(filter)
+        .orFail()
         .lean()
         .then(result => {
           return resolve(result);
@@ -15,6 +16,7 @@ module.exports = (table, filter = {}, limit = 10) => {
     }
     return database[table]
       .find(filter)
+      .orFail()
       .limit(limit)
       .lean()
       .then(result => {
