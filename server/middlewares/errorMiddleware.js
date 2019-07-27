@@ -15,8 +15,24 @@
  */
 
 const constants = require('../utils/constants');
- // eslint-disable-next-line
+// eslint-disable-next-line
 module.exports = (err, req, res, next) => {
+  if (err.name === constants.error.name.DOCUMENT_NOT_FOUND_ERROR) {
+    let errorMessage;
+
+    switch (req.route.path) {
+      case constants.endpoints.SIGN_IN:
+        errorMessage = constants.messages.error.INVALID_USER;
+        break;
+      default:
+        errorMessage = constants.messages.error.DOCUMENT_NOT_FOUND;
+        break;
+    }
+
+    return res.status(404).json({
+      data: errorMessage,
+    });
+  }
   if (err.name === constants.error.name.VALIDATION_ERROR) {
     return res.status(400).json({
       data: err.details[0].message,

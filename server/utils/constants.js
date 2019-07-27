@@ -12,6 +12,7 @@ module.exports = {
   },
   messages: {
     error: {
+      DOCUMENT_NOT_FOUND: 'No data found.',
       UNEXPECTED_RUNNING:
         'An unexpected error ocurred while processing your request. Please try again.',
       INVALID_USER:
@@ -27,10 +28,15 @@ module.exports = {
   },
   error: {
     name: {
+      DOCUMENT_NOT_FOUND_ERROR: 'DocumentNotFoundError',
       VALIDATION_ERROR: 'ValidationError',
     },
     code: {
       UNIQUE_CONSTRAINT: 11000,
     },
+  },
+  endpoints: {
+    REGISTER: '/register',
+    SIGN_IN: '/sign_in',
   },
 };

@@ -46,27 +46,22 @@ module.exports = (req, res, next) => {
 
   findDatabase(constants.tables.USERS, { email, password }, 1)
     .then(user => {
-      if (user) {
-        const jwt = generateSession(
-          user._id,
-          constants.values.cryptography.TOKEN_KEY,
-          constants.values.cryptography.SESSION_SIGNATURE_KEY,
-          constants.values.EXPIRATION_TIME_IN_SECONDS
-        );
+      const jwt = generateSession(
+        user._id,
+        constants.values.cryptography.TOKEN_KEY,
+        constants.values.cryptography.SESSION_SIGNATURE_KEY,
+        constants.values.EXPIRATION_TIME_IN_SECONDS
+      );
 
-        res.cookie(constants.values.cookies.SESSION, jwt, {
-          expires: new Date(
-            Date.now() + constants.values.EXPIRATION_TIME_IN_SECONDS * 1000
-          ),
-        });
+      res.cookie(constants.values.cookies.SESSION, jwt, {
+        expires: new Date(
+          Date.now() + constants.values.EXPIRATION_TIME_IN_SECONDS * 1000
+        ),
+      });
 
-        delete user.password;
-        return res.status(200).json({
-          data: user,
-        });
-      }
-      return res.status(404).json({
-        data: constants.messages.error.INVALID_USER,
+      delete user.password;
+      return res.status(200).json({
+        data: user,
       });
     })
     .catch(err => {
