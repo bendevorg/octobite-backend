@@ -1,4 +1,4 @@
-APP_NAME="boilerplate"
+APP_NAME="octobite-backend"
 
 #   By default (without ENVIRONMENT set) we run as "dev"
 if [ -z "${ENVIRONMENT}" ]
