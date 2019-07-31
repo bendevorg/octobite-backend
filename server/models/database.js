@@ -2,11 +2,6 @@
 const mongoose = require('mongoose');
 const fs = require('fs');
 
-console.log(`mongodb://${process.env.DB_USERNAME}:${encodeURIComponent(
-  process.env.DB_PASSWORD
-)}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}
-`)
-
 const DB_HOST = `mongodb://${process.env.DB_USERNAME}:${encodeURIComponent(
   process.env.DB_PASSWORD
 )}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}
