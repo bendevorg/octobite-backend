@@ -39,7 +39,7 @@ const findDatabase = require('../../../utils/findDatabase');
  * @throws {object} - Returns a msg that indicates a failure
  *
  */
-module.exports = (req, res) => {
+module.exports = (req, res, next) => {
   findDatabase(constants.tables.GAMES)
     .then(games => {
       return res.status(200).json({
@@ -47,8 +47,6 @@ module.exports = (req, res) => {
       });
     })
     .catch(err => {
-      return res.status(err.status).json({
-        data: err.message,
-      });
+      return next(err);
     });
 };
