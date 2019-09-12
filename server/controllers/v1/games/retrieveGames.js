@@ -40,7 +40,14 @@ const findDatabase = require('../../../utils/findDatabase');
  *
  */
 module.exports = (req, res, next) => {
-  findDatabase(constants.tables.GAMES)
+  const { offset, amount } = req.query;
+
+  findDatabase(
+    constants.tables.GAMES,
+    {},
+    offset,
+    amount,
+  )
     .then(games => {
       return res.status(200).json({
         data: games,
