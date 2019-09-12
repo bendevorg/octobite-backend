@@ -1,6 +1,6 @@
 const database = require('../models/database');
 
-module.exports = (table, filter = {}, limit = 10) => {
+module.exports = (table, filter = {}, offset = 0, limit = 10) => {
   return new Promise((resolve, reject) => {
     if (limit === 1) {
       return database[table]
@@ -17,7 +17,8 @@ module.exports = (table, filter = {}, limit = 10) => {
     return database[table]
       .find(filter)
       .orFail()
-      .limit(limit)
+      .skip(Number.isNaN(offset) ? 0 : Number(offset))
+      .limit(Number.isNaN(limit) ? 0 : Number(limit))
       .lean()
       .then(result => {
         return resolve(result);
