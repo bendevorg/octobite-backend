@@ -40,8 +40,11 @@ const findDatabase = require('../../../utils/findDatabase');
  *
  */
 module.exports = (req, res, next) => {
-  const { offset, amount, platforms, range, onSale } = req.query;
+  const { offset, amount, name, platforms, range, onSale } = req.query;
   let filters = { $and: [] };
+  if (name) {
+    filters.$and.push({ 'name': { $regex: new RegExp(name, 'gi') }});
+  }
   if (platforms) {
     const platformsArray = platforms.split(',');
     filters.$and.push({ 'platforms.name': { $in: platformsArray } });
