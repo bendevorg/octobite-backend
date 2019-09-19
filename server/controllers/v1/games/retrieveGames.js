@@ -40,11 +40,31 @@ const findDatabase = require('../../../utils/findDatabase');
  *
  */
 module.exports = (req, res, next) => {
-  const { offset, amount } = req.query;
-
+  const { offset, amount, platforms, range, onSale } = req.query;
+  let filters = { $and: [] };
+  if (platforms) {
+    const platformsArray = platforms.split(',');
+    filters.$and.push({ 'platforms.name': { $in: platformsArray } });
+  }
+  if (onSale === 'true') {
+    filters.$and.push({ 'platforms.discountPercent': { $gt: 0 } });
+  }
+  if (range) {
+    const rangeArray = range.split(',');
+    if (rangeArray.length === 2) {
+      filters.$and.push({
+        'platforms.priceWithDiscount.value':{
+          $gte: Number(rangeArray[0]), $lte: Number(rangeArray[1])
+        }
+      });
+    }
+  }
+  if (filters.$and.length === 0) {
+    filters = {};
+  }
   findDatabase(
     constants.tables.GAMES,
-    {},
+    filters,
     offset,
     amount,
   )
