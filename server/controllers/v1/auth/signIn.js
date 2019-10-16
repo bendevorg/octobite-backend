@@ -44,7 +44,7 @@ module.exports = (req, res, next) => {
   email = email.trim();
   password = hasher(password, constants.values.cryptography.PASSWORD_KEY);
 
-  findDatabase(constants.tables.USERS, { email, password }, 1)
+  findDatabase(constants.tables.USERS, { email, password }, 0, 1)
     .then(user => {
       const jwt = generateSession(
         user._id,
