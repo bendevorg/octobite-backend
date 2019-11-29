@@ -1,18 +1,12 @@
 module.exports = mongoose => {
   return new mongoose.Schema({
-    name: {
+    id: {
       type: String,
       required: true,
     },
-    platform: {
-      type: String,
-      unique: true,
+    platformIds: {
+      type: [String],
       required: true,
-    },
-    value: {
-      type: Number,
-      required: false,
-      default: 0,
     },
   });
 };

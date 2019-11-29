@@ -13,5 +13,6 @@ module.exports = mongoose => {
       type: String,
       required: true,
     },
+    wishlist: [mongoose.Schema.Wishes],
   });
 };
