@@ -7,7 +7,8 @@
 const tokenDecryptor = require('../utils/tokenDecryptor');
 const validator = require('../utils/validator');
 const constants = require('../utils/constants');
-const database = require('../models/database');
+const findDatabase = require('../utils/findDatabase');
+const { InvalidSession } = require('../utils/errors');
 
 /**
  * Check if user`s token is valid
@@ -18,9 +19,7 @@ const database = require('../models/database');
  */
 module.exports = (req, res, next) => {
   if (!req.cookies || !validator.isValidString(req.cookies.session)) {
-    return res.status(401).json({
-      msg: constants.messages.error.INVALID_LOGIN,
-    });
+    return next(new InvalidSession());
   }
 
   let userData = tokenDecryptor(
@@ -29,28 +28,18 @@ module.exports = (req, res, next) => {
   );
 
   if (!userData) {
-    return res.status(401).json({
-      msg: constants.messages.error.INVALID_LOGIN,
-    });
+    return next(new InvalidSession());
   }
 
-  return database.Users.findById(
-    userData._id,
-    '_id username notificationSettings summary',
-    (err, user) => {
-      if (err) {
-        return res.status(500).json({
-          msg: constants.messages.error.UNEXPECTED_DB,
-        });
-      }
+  return findDatabase(constants.tables.USERS, { userData }, 0, 1, false)
+    .then(user => {
       if (!user) {
-        return res.status(401).json({
-          msg: constants.messages.error.INVALID_LOGIN,
-        });
+        return next(new InvalidSession());
       }
-
       req.user = user;
       return next();
-    }
-  );
+    })
+    .catch(err => {
+      return next(err);
+    });
 };

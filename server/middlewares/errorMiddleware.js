@@ -43,6 +43,11 @@ module.exports = (err, req, res, next) => {
       data: constants.messages.error.UNIQUE_CONSTRAINT,
     });
   }
+  if (err.code === constants.error.name.INVALID_AUTH) {
+    return res.status(401).json({
+      data: constants.error.name.INVALID_AUTH,
+    });
+  }
   return res.status(500).json({
     data: constants.messages.error.UNEXPECTED_RUNNING,
   });
