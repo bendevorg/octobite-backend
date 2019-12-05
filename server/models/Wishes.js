@@ -1,5 +1,12 @@
 module.exports = mongoose => {
   return new mongoose.Schema({
-    game: mongoose.Schema.games,
+    id: {
+      type: String,
+      required: true,
+    },
+    platformIds: {
+      type: [String],
+      required: true,
+    },
   });
 };
