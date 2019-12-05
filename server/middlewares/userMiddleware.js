@@ -22,16 +22,16 @@ module.exports = (req, res, next) => {
     return next(new InvalidSession());
   }
 
-  let userData = tokenDecryptor(
+  const _id = tokenDecryptor(
     req.cookies.session,
-    constants.values.TOKEN_ENCRYPT_KEY
+    constants.values.cryptography.SESSION_SIGNATURE_KEY
   );
 
-  if (!userData) {
+  if (!_id) {
     return next(new InvalidSession());
   }
 
-  return findDatabase(constants.tables.USERS, { userData }, 0, 1, false)
+  return findDatabase(constants.tables.USERS, { _id }, 0, 1, false)
     .then(user => {
       if (!user) {
         return next(new InvalidSession());
