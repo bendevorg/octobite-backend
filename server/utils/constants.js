@@ -17,6 +17,8 @@ module.exports = {
         'An unexpected error ocurred while processing your request. Please try again.',
       INVALID_USER:
         'The email and password you entered do not correspond to an existing user.',
+      UNAUTHORIZED:
+        'You need to be logged in to access this feature.',
       UNEXPECTED_DB:
         'An error ocurred while accessing our database. Please try again.',
       UNIQUE_CONSTRAINT: 'Data sent is violating a unique constraint',
