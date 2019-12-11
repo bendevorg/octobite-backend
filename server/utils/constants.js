@@ -19,7 +19,9 @@ module.exports = {
         'The email and password you entered do not correspond to an existing user.',
       UNEXPECTED_DB:
         'An error ocurred while accessing our database. Please try again.',
-      UNIQUE_CONSTRAINT: 'Data sent is violating a unique constraint',
+      UNIQUE_CONSTRAINT: 'Data sent is violating a unique constraint.',
+      INVALID_PLATFORM_ID:
+        'The platform Id you are trying to insert is invalid.',
     },
   },
   tables: {
@@ -33,6 +35,7 @@ module.exports = {
       NOT_FOUND: 'NotFoundError',
       INVALID_AUTH: 'InvalidAuthError',
       INVALID_SESSION: 'InvalidSessionError',
+      INVALID_PLATFORM_ID: 'InvalidPlatformId',
     },
     code: {
       UNIQUE_CONSTRAINT: 11000,
