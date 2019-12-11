@@ -43,9 +43,14 @@ module.exports = (err, req, res, next) => {
       data: constants.messages.error.UNIQUE_CONSTRAINT,
     });
   }
-  if (err.code === constants.error.name.INVALID_AUTH) {
+  if (err.name === constants.error.name.INVALID_AUTH) {
     return res.status(401).json({
       data: constants.error.name.INVALID_AUTH,
+    });
+  }
+  if (err.name === constants.error.name.INVALID_PLATFORM_ID) {
+    return res.status(400).json({
+      data: constants.messages.error.INVALID_PLATFORM_ID,
     });
   }
   return res.status(500).json({

@@ -16,6 +16,14 @@ class InvalidAuth extends Error {
   }
 }
 
+class InvalidPlatformId extends Error {
+  constructor(...args) {
+    super(...args);
+    this.name = constants.error.name.INVALID_PLATFORM_ID;
+    Error.captureStackTrace(this, InvalidPlatformId);
+  }
+}
+
 class InvalidSession extends Error {
   constructor(...args) {
     super(...args);
@@ -28,4 +36,5 @@ module.exports = {
   NotFound,
   InvalidAuth,
   InvalidSession,
+  InvalidPlatformId,
 };
