@@ -33,6 +33,11 @@ module.exports = (err, req, res, next) => {
       data: errorMessage,
     });
   }
+  if (err.name === constants.error.name.INVALID_SESSION) {
+    return res.status(403).json({
+      data: constants.messages.error.UNAUTHORIZED,
+    });
+  }
   if (err.name === constants.error.name.VALIDATION_ERROR) {
     return res.status(400).json({
       data: err.details[0].message,
