@@ -4,7 +4,7 @@ const constants = require('../../../utils/constants');
 const { InvalidPlatformId } = require('../../../utils/errors');
 
 module.exports = async (req, res, next) => {
-  const { id, platformId } = req.body;
+  const { id, platformIds } = req.body;
   const { user } = req;
 
   let games;
@@ -14,21 +14,24 @@ module.exports = async (req, res, next) => {
   } catch (err) {
     return next(err);
   }
-  const validPlatform = games.platforms.find(
-    platform => platform.gameId === platformId
-  );
-  if (!validPlatform) {
-    return next(new InvalidPlatformId());
-  }
-  let game = user.wishlist.find(wish => wish.id === id);
-  if (!game) {
-    user.wishlist.push({ id });
-    game = user.wishlist[user.wishlist.length - 1];
-  }
-  const platform = game.platformIds.find(platId => platId === platformId);
-  if (!platform) {
-    game.platformIds.push(platformId);
-  }
+
+  platformIds.array.forEach(platformId => {
+    const validPlatform = games.platforms.find(
+      platform => platform.gameId === platformId
+    );
+    if (!validPlatform) {
+      return next(new InvalidPlatformId());
+    }
+    let game = user.wishlist.find(wish => wish.id === id);
+    if (!game) {
+      user.wishlist.push({ id });
+      game = user.wishlist[user.wishlist.length - 1];
+    }
+    const platform = game.platformIds.find(platId => platId === platformId);
+    if (!platform) {
+      game.platformIds.push(platformId);
+    }
+  });
   let newUser;
   try {
     newUser = await updateDatabase(constants.tables.USERS, user._id, user);
