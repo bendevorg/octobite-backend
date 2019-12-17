@@ -11,5 +11,11 @@ const controllers = retrieveControllers(
 const schemas = retrieveSchemas(__filename.split('/routers')[1].split('.')[0]);
 
 router.post('/wish', schemas.addWish, userMiddleware, controllers.addWish);
+router.delete(
+  '/wish',
+  schemas.deleteWish,
+  userMiddleware,
+  controllers.deleteWish
+);
 
 module.exports = router;
