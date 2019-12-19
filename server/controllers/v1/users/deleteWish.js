@@ -14,10 +14,9 @@ module.exports = async (req, res, next) => {
   } catch (err) {
     return next(err);
   }
-  let game = user.wishlist.find(wish => wish.id === id);
+  const game = user.wishlist.find(wish => wish.id === id);
   if (!game) {
-    user.wishlist.push({ id });
-    game = user.wishlist[user.wishlist.length - 1];
+    return res.status(200).json({ data: user });
   }
 
   platformIds.forEach(platformId => {
@@ -27,11 +26,18 @@ module.exports = async (req, res, next) => {
     if (!validPlatform) {
       return next(new InvalidPlatformId());
     }
-    const platform = game.platformIds.find(platId => platId === platformId);
-    if (!platform) {
-      game.platformIds.push(platformId);
+    const platform = game.platformIds.findIndex(
+      platId => platId === platformId
+    );
+    if (platform === -1) {
+      return res.status(200).json({ data: user });
     }
+    game.platformIds.splice(platform, 1);
   });
+  if (game.platformIds.length === 0) {
+    const gameIndex = user.wishlist.findIndex(wish => wish.id === id);
+    user.wishlist.splice(gameIndex, 1);
+  }
   let newUser;
   try {
     newUser = await updateDatabase(constants.tables.USERS, user._id, user);
