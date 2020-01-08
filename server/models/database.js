@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 const mongoose = require('mongoose');
 const fs = require('fs');
+const logger = require('javascript-custom-logger');
 
 const DB_HOST = `mongodb://${process.env.DB_USERNAME}:${encodeURIComponent(
   process.env.DB_PASSWORD
@@ -18,17 +19,17 @@ const database = mongoose.connection;
 
 // Connection fails log the error
 database.on('error', err => {
-  console.error('MongoDB connection error: ', err);
+  logger.error(err);
 });
 
 // Connection ok log the success
 database.once('open', () => {
-  console.info('MongoDB connection is established.');
+  logger.info({ message: 'MongoDB connection is established.' });
 });
 
 // Connect lost log the event and try to reconnect
 database.on('disconnected', () => {
-  console.error('MongoDB disconnected.');
+  logger.warn({ message: 'MongoDB disconnected.' });
   mongoose.connect(DB_HOST, {
     auto_reconnect: true,
     useNewUrlParser: true,
@@ -38,7 +39,7 @@ database.on('disconnected', () => {
 
 // Connect restablished log the event
 database.on('reconnected', () => {
-  console.info('MongoDB reconnected.');
+  logger.info({ message: 'MongoDB reconnected.' });
 });
 
 // Load our DB models

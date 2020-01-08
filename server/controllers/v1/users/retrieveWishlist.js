@@ -27,6 +27,7 @@
     }
 */
 
+const logger = require('javascript-custom-logger');
 const findDatabase = require('../../../utils/findDatabase');
 const constants = require('../../../utils/constants');
 
@@ -46,6 +47,7 @@ module.exports = async (req, res, next) => {
       game.platforms = platforms;
       user.wishlist[i] = game;
     } catch(err) {
+      logger.error(err);
       user.wishlist.splice(i, 1);
       i--;
     }

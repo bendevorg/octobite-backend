@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 const dotenv = require('dotenv');
+const logger = require('javascript-custom-logger');
 const app =
   process.env.NODE_ENV === 'production'
     ? require('./serverProduction')
@@ -10,8 +11,8 @@ const { PORT } = process.env;
 
 app.listen(PORT, error => {
   if (error) {
-    console.log(error);
+    logger.error(error);
   } else {
-    console.info('🌎  Server is listening on port %s.', PORT);
+    logger.info({ message: `🌎  Server is listening on port ${PORT}.` });
   }
 });
