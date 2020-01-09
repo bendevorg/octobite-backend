@@ -54,6 +54,7 @@ module.exports = (req, res, next) => {
       );
 
       res.cookie(constants.values.cookies.SESSION, jwt, {
+        domain: constants.values.cookies.DOMAIN,
         expires: new Date(
           Date.now() + constants.values.EXPIRATION_TIME_IN_SECONDS * 1000
         ),

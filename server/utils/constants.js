@@ -7,6 +7,7 @@ module.exports = {
     },
     EXPIRATION_TIME_IN_SECONDS: 60 * 60 * 24 * 30,
     cookies: {
+      DOMAIN: '.octobite.com',
       SESSION: 'session',
     },
   },
