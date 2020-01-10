@@ -2,26 +2,24 @@
  * @api {GET} /v1/games/ List games
  * @apiName List games
  * @apiGroup Games
- * @apiVersion 1.0.0
+ * @apiVersion 1.1.0
  *
  * @apiSuccess (201) {String} data Games data.
  * @apiSuccessExample {json} Success-Response:
     {
-      "data": {
+      "data": [{
         "_id": "1",
         "name": "super milk bros",
         "platform": "Switch",
         "value": 50,25
         "__v": 0
-      }
+      }],
+      "total": 5800,
+      "remaining": 5000
     }
  * @apiError (400) {String} data Error message.
  * @apiError (404) {String} data Error message.
  *
- * @apiErrorExample {json} 400:
-    {
-      "data": "\"password\" is not allowed to be empty"
-    }
  * @apiErrorExample {json} 409:
     {
       "data": "Data sent is violating a unique constraint."
@@ -30,6 +28,7 @@
 
 const constants = require('../../../utils/constants');
 const findDatabase = require('../../../utils/findDatabase');
+const countDatabase = require('../../../utils/countDatabase');
 
 /**
  * List Games
@@ -71,9 +70,19 @@ module.exports = (req, res, next) => {
     offset,
     amount,
   )
-    .then(games => {
+    .then(async games => {
+      let total = -1;
+      let remaining = -1;
+      try {
+        total = await countDatabase(constants.tables.GAMES, filters);
+        remaining = total - (offset || 0 + amount || constants.values.MINIMUM_GAMES_LIMIT);
+      } catch(err) {
+        return next(err);
+      }
       return res.status(200).json({
         data: games,
+        total,
+        remaining,
       });
     })
     .catch(err => {

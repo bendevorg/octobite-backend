@@ -13,6 +13,7 @@ module.exports = {
       DOMAIN: '.octobite.com',
       SESSION: 'session',
     },
+    MINIMUM_GAMES_LIMIT: 10,
   },
   messages: {
     error: {
