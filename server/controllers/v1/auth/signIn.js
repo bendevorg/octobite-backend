@@ -61,6 +61,7 @@ module.exports = (req, res, next) => {
       });
 
       delete user.password;
+      delete user.wishlist;
       return res.status(200).json({
         data: user,
       });
