@@ -42,7 +42,7 @@ module.exports = (req, res, next) => {
   const { offset, amount, name, platforms, range, onSale } = req.query;
   let filters = { $and: [] };
   if (name) {
-    filters.$and.push({ 'name': { $regex: new RegExp(name, 'gi') }});
+    filters.$and.push({ 'name': { $regex: new RegExp(name, 'gi') } });
   }
   if (platforms) {
     const platformsArray = platforms.split(',');
@@ -55,8 +55,9 @@ module.exports = (req, res, next) => {
     const rangeArray = range.split(',');
     if (rangeArray.length === 2) {
       filters.$and.push({
-        'platforms.priceWithDiscount.value':{
-          $gte: Number(rangeArray[0]), $lte: Number(rangeArray[1])
+        'platforms.priceWithDiscount.value': {
+          $gte: Number(rangeArray[0]),
+          $lte: Number(rangeArray[1])
         }
       });
     }
@@ -64,26 +65,30 @@ module.exports = (req, res, next) => {
   if (filters.$and.length === 0) {
     filters = {};
   }
-  findDatabase(
-    constants.tables.GAMES,
-    filters,
-    offset,
-    amount,
-  )
+  findDatabase(constants.tables.GAMES, filters, offset, amount)
     .then(async games => {
       let total = -1;
       let remaining = -1;
       try {
         total = await countDatabase(constants.tables.GAMES, filters);
-        remaining = total - (offset || 0 + amount || constants.values.MINIMUM_GAMES_LIMIT);
-      } catch(err) {
+        remaining =
+          total -
+          (
+            (Number.isNaN(offset) || !offset ? 0 : Number(offset)) +
+            (
+              Number.isNaN(amount) || !amount
+              ? constants.values.MINIMUM_GAMES_LIMIT
+              : Number(amount)
+            )
+          );
+      } catch (err) {
         return next(err);
       }
       return res.status(200).json({
         data: {
           games,
           total,
-          remaining,
+          remaining
         },
       });
     })
