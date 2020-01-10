@@ -80,9 +80,11 @@ module.exports = (req, res, next) => {
         return next(err);
       }
       return res.status(200).json({
-        data: games,
-        total,
-        remaining,
+        data: {
+          games,
+          total,
+          remaining,
+        },
       });
     })
     .catch(err => {
