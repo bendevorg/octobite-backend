@@ -22,7 +22,13 @@ router.post(
 );
 router.post(
   '/recovery',
+  schemas.recovery,
   controllers.recovery
+);
+router.post(
+  '/recovery/confirm',
+  schemas.changePassword,
+  controllers.changePassword
 );
 
 module.exports = router;
