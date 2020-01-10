@@ -20,5 +20,9 @@ router.post(
   '/sign_out',
   controllers.signOut
 );
+router.post(
+  '/recovery',
+  controllers.recovery
+);
 
 module.exports = router;
