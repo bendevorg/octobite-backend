@@ -44,7 +44,7 @@ module.exports = (req, res, next) => {
   email = email.trim();
   password = hasher(password, constants.values.cryptography.PASSWORD_KEY);
 
-  findDatabase(constants.tables.USERS, { email, password }, 0, 1)
+  findDatabase(constants.tables.USERS, { email, password }, constants.selections.USER_WITH_ONLY_ID_DATA, 0, 1)
     .then(user => {
       const jwt = generateSession(
         user._id,
@@ -60,8 +60,6 @@ module.exports = (req, res, next) => {
         ),
       });
 
-      delete user.password;
-      delete user.wishlist;
       return res.status(200).json({
         data: user,
       });

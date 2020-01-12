@@ -10,10 +10,17 @@ module.exports = {
     EXPIRATION_TIME_IN_SECONDS: 60 * 60 * 24 * 30,
     RECOVERY_EXPIRATION_TIME_IN_SECONDS: 60 * 60 * 24,
     cookies: {
-      DOMAIN: '.octobite.com',
+      DOMAIN: process.env.DOMAIN,
       SESSION: 'session',
     },
     MINIMUM_GAMES_LIMIT: 10,
+  },
+  selections: {
+    USER_WITH_ONLY_ID_DATA: ['_id'],
+    USER_WITH_PROFILE_DATA: ['_id', 'name', 'email'],
+    USER_WITH_PASSWORD_DATA: ['_id', 'password'],
+    USER_WITH_WISHLIST: ['_id', 'wishlist'],
+    USER_WITH_FULL_DATA: ['_id', 'email', 'password', 'wishlist'],
   },
   messages: {
     error: {

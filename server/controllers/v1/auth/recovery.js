@@ -25,7 +25,7 @@ module.exports = (req, res, next) => {
   let { email } = req.body;
   email = email.trim();
 
-  findDatabase(constants.tables.USERS, { email }, 0, 1)
+  findDatabase(constants.tables.USERS, { email }, constants.selections.USER_WITH_ONLY_ID_DATA, 0, 1)
     .then(user => {
       const jwt = generateSession(
         user._id,

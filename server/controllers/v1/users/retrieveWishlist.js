@@ -32,14 +32,33 @@ const findDatabase = require('../../../utils/findDatabase');
 const constants = require('../../../utils/constants');
 
 module.exports = async (req, res, next) => {
-  const { user } = req;
+  let user = null;
+  try {
+    user = await findDatabase(
+      constants.tables.USERS,
+      { _id: req.user._id },
+      constants.selections.USER_WITH_WISHLIST,
+      0,
+      1
+    );
+  } catch (err) {
+    return next(err);
+  }
   for (let i = 0; i < user.wishlist.length; i++) {
     let game;
     try {
-      game = await findDatabase(constants.tables.GAMES, { _id: user.wishlist[i].id }, 0, 1);
+      game = await findDatabase(
+        constants.tables.GAMES,
+        { _id: user.wishlist[i].id },
+        [],
+        0,
+        1
+      );
       const platforms = [];
       user.wishlist[i].platformIds.forEach(platformId => {
-        const platformIndex = game.platforms.findIndex(platform => platform.gameId === platformId);
+        const platformIndex = game.platforms.findIndex(
+          platform => platform.gameId === platformId
+        );
         if (platformIndex !== -1) {
           platforms.push(game.platforms[platformIndex]);
         }

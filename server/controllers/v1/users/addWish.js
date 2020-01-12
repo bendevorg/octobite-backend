@@ -10,7 +10,7 @@ module.exports = async (req, res, next) => {
   let games;
 
   try {
-    games = await findDatabase(constants.tables.GAMES, { _id: id }, 0, 1);
+    games = await findDatabase(constants.tables.GAMES, { _id: id }, [], 0, 1);
   } catch (err) {
     return next(err);
   }
