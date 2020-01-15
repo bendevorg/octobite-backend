@@ -26,7 +26,7 @@ module.exports = async (req, res, next) => {
   }
   let game = user.wishlist.find(wish => wish.id === id);
   if (!game) {
-    user.wishlist.push({ id });
+    user.wishlist.push({ id, platformIds: [] });
     game = user.wishlist[user.wishlist.length - 1];
   }
 
