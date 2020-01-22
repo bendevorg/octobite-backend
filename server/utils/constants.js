@@ -58,10 +58,12 @@ module.exports = {
     },
   },
   endpoints: {
+    RECOVERY: '/recovery',
+    RECOVERY_CONFIRM: '/recovery/confirm',
     REGISTER: '/register',
     SIGN_IN: '/sign_in',
     SIGN_OUT: '/sign_out',
-    RECOVERY: '/recovery',
-    RECOVERY_CONFIRM: '/recovery/confirm',
+    WISH: '/wish',
+    WISHLIST: '/wishlist',
   },
 };

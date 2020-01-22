@@ -11,7 +11,11 @@ const controllers = retrieveControllers(
 );
 const schemas = retrieveSchemas(__filename.split('/routers')[1].split('.')[0]);
 
-router.get('/wishlist', userMiddleware, controllers.retrieveWishlist);
+router.get(
+  constants.endpoints.WISHLIST,
+  userMiddleware,
+  controllers.retrieveWishlist
+);
 router.post(
   constants.endpoints.WISH,
   schemas.addWish,
