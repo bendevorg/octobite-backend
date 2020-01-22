@@ -17,5 +17,15 @@ router.post(
   controllers.register
 );
 router.post(constants.endpoints.SIGN_OUT, controllers.signOut);
+router.post(
+  constants.endpoints.RECOVERY,
+  schemas.recovery,
+  controllers.recovery
+);
+router.post(
+  constants.endpoints.RECOVERY_CONFIRM,
+  schemas.changePassword,
+  controllers.changePassword
+);
 
 module.exports = router;

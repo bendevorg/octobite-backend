@@ -8,7 +8,7 @@ setup() {
 
 update_server() {
   echo "Restart server"
-  pm2 start --name $1 npm -- run $2
+  pm2 start --name $1 -l ../../logs/$1.log npm -- run $2
 }
 
 ssh -i $3 $1@$2 "$(typeset -f setup update_server); setup $4 $5; update_server $5 $6"

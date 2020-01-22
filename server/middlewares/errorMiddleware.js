@@ -14,6 +14,7 @@
  *
  */
 
+const logger = require('javascript-custom-logger');
 const constants = require('../utils/constants');
 // eslint-disable-next-line
 module.exports = (err, req, res, next) => {
@@ -58,6 +59,7 @@ module.exports = (err, req, res, next) => {
       data: constants.messages.error.INVALID_PLATFORM_ID,
     });
   }
+  logger.error(err);
   return res.status(500).json({
     data: constants.messages.error.UNEXPECTED_RUNNING,
   });

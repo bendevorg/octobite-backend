@@ -11,13 +11,14 @@ const controllers = retrieveControllers(
 );
 const schemas = retrieveSchemas(__filename.split('/routers')[1].split('.')[0]);
 
+router.get('/wishlist', userMiddleware, controllers.retrieveWishlist);
 router.post(
   constants.endpoints.WISH,
   schemas.addWish,
   userMiddleware,
   controllers.addWish
 );
-router.delete(
+router.patch(
   constants.endpoints.WISH,
   schemas.deleteWish,
   userMiddleware,

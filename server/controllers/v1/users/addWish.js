@@ -5,18 +5,28 @@ const { InvalidPlatformId } = require('../../../utils/errors');
 
 module.exports = async (req, res, next) => {
   const { id, platformIds } = req.body;
-  const { user } = req;
 
   let games;
-
+  let user;
   try {
-    games = await findDatabase(constants.tables.GAMES, { _id: id }, 0, 1);
+    user = await findDatabase(
+      constants.tables.USERS,
+      { _id: req.user._id },
+      constants.selections.USER_WITH_WISHLIST,
+      0,
+      1
+    );
+  } catch (err) {
+    return next(err);
+  }
+  try {
+    games = await findDatabase(constants.tables.GAMES, { _id: id }, [], 0, 1);
   } catch (err) {
     return next(err);
   }
   let game = user.wishlist.find(wish => wish.id === id);
   if (!game) {
-    user.wishlist.push({ id });
+    user.wishlist.push({ id, platformIds: [] });
     game = user.wishlist[user.wishlist.length - 1];
   }
 

@@ -9,7 +9,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: ['http://localhost:8082'],
+    origin: ['https://octobite.com', 'https://www.octobite.com', 'http://octobite.com', 'octobite.com'],
     methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
     credentials: true,
   })

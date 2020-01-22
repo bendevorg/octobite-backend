@@ -3,6 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
+const logger = require('javascript-custom-logger');
 
 const filename = '.env';
 const envFile = path.resolve(__dirname, `../${filename}`);
@@ -46,13 +47,13 @@ function completeFile() {
     Object.keys(config).forEach(key => {
       const envVar = config[key];
       const newLine = `${key}=${envVar}`;
-      console.log(`writing to file: ${newLine}`);
+      logger.info({ message: `writing to file: ${newLine}` });
       writeStream.write(`${newLine}\n`);
     });
   });
 
   writeStream.end('');
-  console.log(`${filename} is ok!`);
+  logger.info({ message: `${filename} is ok!` });
 }
 
 /**
@@ -73,7 +74,7 @@ function readFile() {
 function createFile() {
   fs.writeFile(envFile, '', function error(err) {
     if (err) {
-      console.error(err);
+      logger.error(err);
     }
 
     readFile();
@@ -91,7 +92,7 @@ function onStat(err, stats) {
   if (!err && stats.isFile()) {
     readFile();
   } else {
-    console.log(`${filename} does not exist, creating it.`);
+    logger.info({ message: `${filename} does not exist, creating it.` });
     createFile();
   }
 }
@@ -100,5 +101,5 @@ function onStat(err, stats) {
  * Check the stat of the file .env
  * Calling the callback onStat
  */
-console.log(`checking file ${filename}`);
+logger.info({ message: `checking file ${filename}` });
 fs.stat(envFile, onStat);

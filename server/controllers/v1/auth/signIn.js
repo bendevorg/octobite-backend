@@ -44,7 +44,7 @@ module.exports = (req, res, next) => {
   email = email.trim();
   password = hasher(password, constants.values.cryptography.PASSWORD_KEY);
 
-  findDatabase(constants.tables.USERS, { email, password }, 0, 1)
+  findDatabase(constants.tables.USERS, { email, password }, constants.selections.USER_WITH_ONLY_ID_DATA, 0, 1)
     .then(user => {
       const jwt = generateSession(
         user._id,
@@ -54,12 +54,12 @@ module.exports = (req, res, next) => {
       );
 
       res.cookie(constants.values.cookies.SESSION, jwt, {
+        domain: constants.values.cookies.DOMAIN,
         expires: new Date(
           Date.now() + constants.values.EXPIRATION_TIME_IN_SECONDS * 1000
         ),
       });
 
-      delete user.password;
       return res.status(200).json({
         data: user,
       });
