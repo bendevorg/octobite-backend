@@ -75,7 +75,7 @@ while (remainingModels.length > 0) {
     remainingModels.splice(remainingModelIndex, 1);
   } catch (e) {
     remainingModelIndex =
-      remainingModelIndex === remainingModels.length - 1
+      remainingModelIndex >= remainingModels.length - 1
         ? 0
         : remainingModelIndex + 1;
   }
