@@ -30,6 +30,7 @@
 
 const constants = require('../../../utils/constants');
 const findDatabase = require('../../../utils/findDatabase');
+const cache = require('../../../../tools/cache');
 
 /**
  * List Games
@@ -42,8 +43,23 @@ const findDatabase = require('../../../utils/findDatabase');
 module.exports = (req, res, next) => {
   const { offset, amount, name, platforms, range, onSale } = req.query;
   let filters = { $and: [] };
+  const cacheKey = req.baseUrl.concat(
+    offset,
+    amount,
+    name,
+    platforms,
+    range,
+    onSale
+  );
+  const cachedGames = cache.get(cacheKey);
+
+  if (cachedGames) {
+    return res.status(200).json({
+      data: cachedGames,
+    });
+  }
   if (name) {
-    filters.$and.push({ 'name': { $regex: new RegExp(name, 'gi') }});
+    filters.$and.push({ name: { $regex: new RegExp(name, 'gi') } });
   }
   if (platforms) {
     const platformsArray = platforms.split(',');
@@ -56,22 +72,20 @@ module.exports = (req, res, next) => {
     const rangeArray = range.split(',');
     if (rangeArray.length === 2) {
       filters.$and.push({
-        'platforms.priceWithDiscount.value':{
-          $gte: Number(rangeArray[0]), $lte: Number(rangeArray[1])
-        }
+        'platforms.priceWithDiscount.value': {
+          $gte: Number(rangeArray[0]),
+          $lte: Number(rangeArray[1]),
+        },
       });
     }
   }
   if (filters.$and.length === 0) {
     filters = {};
   }
-  findDatabase(
-    constants.tables.GAMES,
-    filters,
-    offset,
-    amount,
-  )
+  findDatabase(constants.tables.GAMES, filters, offset, amount)
     .then(games => {
+      cache.set(cacheKey, games);
+      cache.ttl(cacheKey, 5 * 60);
       return res.status(200).json({
         data: games,
       });

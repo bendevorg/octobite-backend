@@ -16,9 +16,6 @@ router.post(
   schemas.register,
   controllers.register
 );
-router.post(
-  '/sign_out',
-  controllers.signOut
-);
+router.post(constants.endpoints.SIGN_OUT, controllers.signOut);
 
 module.exports = router;
