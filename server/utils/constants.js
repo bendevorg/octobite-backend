@@ -9,6 +9,7 @@ module.exports = {
     },
     EXPIRATION_TIME_IN_SECONDS: 60 * 60 * 24 * 30,
     RECOVERY_EXPIRATION_TIME_IN_SECONDS: 60 * 60 * 24,
+    CACHE_TTL_IN_SECONDS: 5 * 60,
     cookies: {
       DOMAIN: process.env.DOMAIN,
       SESSION: 'session',

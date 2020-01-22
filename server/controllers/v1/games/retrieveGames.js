@@ -96,13 +96,16 @@ module.exports = (req, res, next) => {
       } catch (err) {
         return next(err);
       }
-      return res.status(200).json({
+      res.status(200).json({
         data: {
           games,
           total,
           remaining,
         },
       });
+      cache.set(cacheKey, games);
+      cache.ttl(cacheKey, constants.values.CACHE_TTL_IN_SECONDS);
+      return;
     })
     .catch(err => {
       return next(err);
