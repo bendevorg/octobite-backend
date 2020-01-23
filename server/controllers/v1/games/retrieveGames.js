@@ -103,7 +103,7 @@ module.exports = (req, res, next) => {
           remaining,
         },
       });
-      cache.set(cacheKey, games);
+      cache.set(cacheKey, { games, total, remaining });
       cache.ttl(cacheKey, constants.values.CACHE_TTL_IN_SECONDS);
       return;
     })
