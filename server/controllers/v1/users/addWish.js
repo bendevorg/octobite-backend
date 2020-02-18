@@ -4,7 +4,8 @@ const constants = require('../../../utils/constants');
 const { InvalidPlatformId } = require('../../../utils/errors');
 
 module.exports = async (req, res, next) => {
-  const { id, platformIds } = req.body;
+  const { id } = req.body;
+  let { platformIds } = req.body;
 
   let games;
   let user;
@@ -28,6 +29,10 @@ module.exports = async (req, res, next) => {
   if (!game) {
     user.wishlist.push({ id, platformIds: [] });
     game = user.wishlist[user.wishlist.length - 1];
+  }
+
+  if (typeof platformIds === 'string') {
+    platformIds = [platformIds];
   }
 
   platformIds.forEach(platformId => {

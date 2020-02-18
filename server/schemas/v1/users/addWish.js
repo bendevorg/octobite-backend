@@ -3,8 +3,10 @@ const joi = require('joi');
 const schema = joi.object().keys({
   id: joi.string().required(),
   platformIds: joi
-    .array()
-    .items(joi.string())
+    .alternatives().try(
+      joi.array().items(joi.string()),
+      joi.string()
+    )
     .required(),
 });
 
