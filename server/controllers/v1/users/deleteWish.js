@@ -14,6 +14,7 @@ module.exports = async (req, res, next) => {
       constants.tables.USERS,
       { _id: req.user._id },
       constants.selections.USER_WITH_WISHLIST,
+      {},
       0,
       1
     );
@@ -21,7 +22,7 @@ module.exports = async (req, res, next) => {
     return next(err);
   }
   try {
-    games = await findDatabase(constants.tables.GAMES, { _id: id }, [], 0, 1);
+    games = await findDatabase(constants.tables.GAMES, { _id: id }, [], {}, 0, 1);
   } catch (err) {
     return next(err);
   }

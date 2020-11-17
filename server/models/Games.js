@@ -7,5 +7,6 @@ module.exports = mongoose => {
     categories: [ mongoose.Schema.Categories ],
     platforms: [ mongoose.Schema.Platforms ],
     enabled: { type: Boolean, required: false, default: true, },
+    score: { type: Number, required: false, default: 0 },
   });
 };

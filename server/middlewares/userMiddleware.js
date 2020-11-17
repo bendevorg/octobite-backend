@@ -31,7 +31,7 @@ module.exports = (req, res, next) => {
     return next(new InvalidSession());
   }
 
-  return findDatabase(constants.tables.USERS, { _id }, constants.selections.USER_WITH_PROFILE_DATA, 0, 1, false)
+  return findDatabase(constants.tables.USERS, { _id }, constants.selections.USER_WITH_PROFILE_DATA, {}, 0, 1, false)
     .then(user => {
       if (!user) {
         return next(new InvalidSession());

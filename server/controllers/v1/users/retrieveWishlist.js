@@ -38,6 +38,7 @@ module.exports = async (req, res, next) => {
       constants.tables.USERS,
       { _id: req.user._id },
       constants.selections.USER_WITH_WISHLIST,
+      {},
       0,
       1
     );
@@ -51,6 +52,7 @@ module.exports = async (req, res, next) => {
         constants.tables.GAMES,
         { _id: user.wishlist[i].id },
         [],
+        {},
         0,
         1
       );

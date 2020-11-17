@@ -81,7 +81,7 @@ module.exports = (req, res, next) => {
   if (filters.$and.length === 0) {
     filters = {};
   }
-  findDatabase(constants.tables.GAMES, filters, [], offset, amount)
+  findDatabase(constants.tables.GAMES, filters, [], { score: -1 }, offset, amount)
     .then(async games => {
       let total = -1;
       let remaining = -1;

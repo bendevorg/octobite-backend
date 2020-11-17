@@ -53,7 +53,7 @@ module.exports = async (req, res, next) => {
 
   let user = '';
   try {
-    user = await findDatabase(constants.tables.USERS, { _id }, constants.selections.USER_WITH_PASSWORD_DATA, 0, 1);
+    user = await findDatabase(constants.tables.USERS, { _id }, constants.selections.USER_WITH_PASSWORD_DATA, {}, 0, 1);
   } catch(err) {
     return next(err);
   }

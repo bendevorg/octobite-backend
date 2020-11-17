@@ -1,7 +1,7 @@
 const database = require('../models/database');
 const constants = require('./constants');
 
-module.exports = (table, filter = {}, select = [], offset = 0, limit = constants.values.MINIMUM_GAMES_LIMIT, lean = true) => {
+module.exports = (table, filter = {}, select = [], sort = {}, offset = 0, limit = constants.values.MINIMUM_GAMES_LIMIT, lean = true) => {
   return new Promise((resolve, reject) => {
     if (limit === 1) {
       return database[table]
@@ -18,6 +18,7 @@ module.exports = (table, filter = {}, select = [], offset = 0, limit = constants
     }
     return database[table]
       .find(filter)
+      .sort(sort)
       .select(select)
       .orFail()
       .skip(Number.isNaN(offset) ? 0 : Number(offset))
