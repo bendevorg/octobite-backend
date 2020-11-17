@@ -17,3 +17,8 @@ Commands:
 `mkdir .credentials` and insert credentials
 
 `pm2 start --name nome-do-app npm -- run prod`
+
+Platform update times:
+- Xbox One: xxh:00m
+- Switch: xxh:15m
+- PS4: xxh:30m
